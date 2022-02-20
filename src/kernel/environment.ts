@@ -1,27 +1,18 @@
 import { IEnv } from './environment.dto';
+import { config } from 'dotenv';
 
 export default class Environment {
-    private static _instance: Environment;
     private env: IEnv;
 
-    private constructor() {
+    public constructor() {
+        config();
         this.env = {
             API_TOKEN: process.env.API_TOKEN,
+            DATE: new Date(),
         };
     }
 
-    public get<T extends keyof IEnv>(key: string): IEnv[T] {
+    public get<T extends keyof IEnv>(key: T): IEnv[T] {
         return this.env[key];
-    }
-
-    public static getInstance(): Environment {
-        if (!Environment._instance) {
-            Environment._instance = new Environment();
-        }
-        return Environment._instance;
-    }
-
-    public static setInstance(instance: Environment): void {
-        Environment._instance = instance;
     }
 };

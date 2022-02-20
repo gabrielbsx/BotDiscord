@@ -1,10 +1,11 @@
 import { writeFile } from 'fs';
-import { config } from 'dotenv';
+import Kernel from './kernel/kernel';
 
-config();
+class Application extends Kernel {
+}
 
-const main = async (): Promise<void> => {
-    console.log(process.env.API_TOKEN);
-};
+const app = new Application();
 
-main();
+const api = app.getEnverionment().get('API_TOKEN');
+
+console.log(api);

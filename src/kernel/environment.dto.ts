@@ -1,4 +1,4 @@
 export interface IEnv {
-    API_TOKEN: string;
-    DATA: Date;
+    API_TOKEN: string | undefined;
+    DATE: Date;
 }
