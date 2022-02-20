@@ -7,7 +7,7 @@ export default class Environment {
     public constructor() {
         config();
         this.env = {
-            API_TOKEN: process.env.API_TOKEN,
+            DISCORD_TOKEN: process.env.DISCORD_TOKEN,
             DATE: new Date(),
         };
     }

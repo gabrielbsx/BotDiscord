@@ -24,5 +24,8 @@
   "version": "1.0.0",
   "main": "app.ts",
   "license": "MIT",
-  "private": true
+  "private": true,
+  "dependencies": {
+    "discord.js": "^13.6.0"
+  }
 }

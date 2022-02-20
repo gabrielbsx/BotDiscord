@@ -1,11 +1,10 @@
 import { writeFile } from 'fs';
-import Kernel from './kernel/kernel';
+import Kernel from './core/kernel';
+class Teste {}
 
 class Application extends Kernel {
 }
 
 const app = new Application();
 
-const api = app.getEnverionment().get('API_TOKEN');
-
-console.log(api);
+app.start();
