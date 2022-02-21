@@ -34,13 +34,16 @@ export default class Ranking {
 
         const ranking = await axios.get<IRanking>(`${Environment.get('API')}/ranking`);
 
-        //create message embbed with ranking data
         const fields: Array<{ name: string, value: string, inline: boolean }> = [];
 
         ranking.data.data.forEach((player: IRankingData, index: number): void => {
+            const _class = gameconfig.get('class')!.get(player.class);
+            const _evolution = gameconfig.get('evolution')!.get(player.evolution);
+            const _kingdom = gameconfig.get('kingdom')!.get(player.kingdom);
+
             fields.push({
-                name: `${index + 1}. ${player.nick}`,
-                value: `Level: ${player.level}, Frag${player.frags > 1 ? 's' : ''}: ${player.frags} :underworld:`,
+                name: `${index + 1}. ${_kingdom}${_class}[${_evolution}] ${player.nick}`,
+                value: `Level: ${player.level}, Frag${player.frags > 1 ? 's' : ''}: ${player.frags}`,
                 inline: false,
             });
         });
@@ -55,7 +58,7 @@ export default class Ranking {
         embed.setTimestamp();
         embed.setThumbnail('https://wydunderworld.com/static/components/Logo/Logo-wow-sitenav.596840db77b4d485a44d65e897e3de57.png');
         embed.addFields(fields);
-        
+
         const meessage = await channel.send({
             embeds: [embed],
         });
