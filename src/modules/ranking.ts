@@ -49,6 +49,7 @@ export default class Ranking {
                 footer: {
                     text: 'Powered by the Underworld BOT',
                 },
-
+            },
+        });
     }
 }
