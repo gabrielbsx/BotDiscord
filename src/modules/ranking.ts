@@ -63,7 +63,7 @@ export default class Ranking {
         //wait for 10 minutes
         setTimeout(() => {
             this.sendRanking(meessage);
-        }, 100);
+        }, 1000 * 60 * 10);
 
         return;
     }
