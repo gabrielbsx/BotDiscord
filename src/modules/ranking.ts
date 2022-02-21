@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { AnyChannel, Client, TextChannel } from 'discord.js';
+import { AnyChannel, Client, GuildEmoji, TextChannel } from 'discord.js';
 import Environment from '../core/environment';
 import { IRankingData, IRanking } from './ranking.dto';
 import gameconfig from '../config/game';

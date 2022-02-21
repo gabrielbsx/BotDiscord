@@ -1,10 +1,10 @@
 const GameConfig = new Map();
 
 const _class = new Map();
-_class.set(0, '🗡️');
-_class.set(1, '🔥');
-_class.set(2, '🐅');
-_class.set(3, '🏹');
+_class.set(0, '<:transknight:945357272001945620>');
+_class.set(1, '<:foema:945357108562513950>');
+_class.set(2, '<:beastmaster:945356982049706024>');
+_class.set(3, '<:huntress:945357154548846612>');
 GameConfig.set('class', _class);
 
 const evolution = new Map();
