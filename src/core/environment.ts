@@ -3,7 +3,7 @@ import { config } from 'dotenv';
 
 export default class Environment {
     private env: IEnv = {
-        DISCORD_TOKEN: 'teste',
+        DISCORD_TOKEN: '',
         DATE: new Date(),
     }
 
@@ -13,7 +13,6 @@ export default class Environment {
     }
 
     public get<T extends keyof IEnv>(key: T): IEnv[T] {
-        console.log(this.env[key]);
         return this.env[key];
     }
 };
