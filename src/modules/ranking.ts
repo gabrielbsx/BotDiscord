@@ -43,7 +43,7 @@ export default class Ranking {
 
             fields.push({
                 name: `${index + 1}. ${_kingdom}${_class}[${_evolution}] ${player.nick}`,
-                value: `Level: ${player.level}, Frag${player.frags > 1 ? 's' : ''}: ${player.frags}`,
+                value: `Level: ${player.level + 1}, Frag${player.frags > 1 ? 's' : ''}: ${player.frags}`,
                 inline: false,
             });
         });
