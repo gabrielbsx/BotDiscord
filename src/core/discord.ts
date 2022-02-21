@@ -1,7 +1,8 @@
-import { Client, ClientOptions, TextChannel, VoiceChannel } from 'discord.js';
+import { AnyChannel, Client, ClientOptions, TextChannel } from 'discord.js';
+import Environment from './environment';
+import axios from 'axios';
 
 export default class Discord {
-    private token: string = '';
     private modules: any = {
         'helloworld': import('../modules/helloworld'),
     }
@@ -12,21 +13,25 @@ export default class Discord {
     private client: Client = new Client(this.clientOptions);
 
     public constructor() { }
+    
 
-    public setToken(token: string): void {
-        this.token = token;
-    }
 
     public async start(): Promise<void> {
-        await this.client.login(this.token);
+        await this.client.login(Environment.get('DISCORD_TOKEN'));
         this.client.on('ready', () => {
             console.log('Bot is online!');
 
             const channel = this.client.channels.cache;
 
-            const info = channel.find((channel: any) => channel.name.includes('ranking') ? channel.name : null);
-
-            console.log(info);
+            channel.forEach(async (channel: AnyChannel) => {
+                if (channel.isText()) {
+                    const textChannel = channel as TextChannel;
+                    if (textChannel.name === '💪ranking') {
+                        const ranking = await axios.get(`${Environment.get('API')}/ranking`);
+                        console.log(ranking);
+                    }
+                }
+            });
         });
     }
 

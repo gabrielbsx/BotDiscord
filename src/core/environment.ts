@@ -1,18 +1,23 @@
-import { IEnv } from './environment.dto';
+import { IEnvironment } from './environment.dto';
 import { config } from 'dotenv';
 
-export default class Environment {
-    private env: IEnv = {
+class Environment {
+    private static environment: IEnvironment = {
         DISCORD_TOKEN: '',
-        DATE: new Date(),
+        API: '',
     }
 
-    public constructor() {
+    public static init(): void {
         config();
-        this.env.DISCORD_TOKEN = process.env.DISCORD_TOKEN as string;
+        this.environment.DISCORD_TOKEN = process.env.DISCORD_TOKEN as string;
+        this.environment.API = process.env.API as string;
     }
 
-    public get<T extends keyof IEnv>(key: T): IEnv[T] {
-        return this.env[key];
+    public static get<T extends keyof IEnvironment>(key: T): IEnvironment[T] {
+        return this.environment[key];
     }
 };
+
+Environment.init();
+
+export default Environment;

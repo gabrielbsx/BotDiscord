@@ -1,4 +1,4 @@
-export interface IEnv {
+export interface IEnvironment {
     DISCORD_TOKEN: string;
-    DATE: Date;
+    API: string;
 }
