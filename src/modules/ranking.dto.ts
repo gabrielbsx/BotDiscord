@@ -32,8 +32,8 @@ export interface IRankingMeta {
 }
 
 export interface IRanking {
-    meta: IMeta,
-    data: IData[],
+    meta: IRankingMeta,
+    data: IRankingData[],
 };
 
 

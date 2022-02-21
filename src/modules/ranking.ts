@@ -2,7 +2,8 @@ import axios from 'axios';
 import { AnyChannel, Client, TextChannel } from 'discord.js';
 import Environment from '../core/environment';
 import { IRankingData, IRanking } from './ranking.dto';
-import gameconfig from  '../config/game';
+import gameconfig from '../config/game';
+import { MessageEmbed } from 'discord.js';
 
 export default class Ranking {
     private static client: Client;
@@ -29,27 +30,32 @@ export default class Ranking {
 
         const ranking = await axios.get<IRanking>(`${Environment.get('API')}/ranking`);
 
-        //message embedded in the channel discord
+        //create message embbed with ranking data
+        const fields: Array<{ name: string, value: string, inline: boolean }> = [];
 
-        const fields = [...ranking.data.data.map((player: IRankingData): any => {
-            return {
-                name: `${player.nick}`,
-                value: `${player.class} ${player.evolution} ${player.kingdom}`,
-                inline: true
-            };
-        })];
-
-        const message = await channel.send({
-            embed: {
-                title: '💪Ranking',
-                description: '',
-                color: 0x00ff00,
-                fields: fields,
-                timestamp: new Date(),
-                footer: {
-                    text: 'Powered by the Underworld BOT',
-                },
-            },
+        ranking.data.data.forEach((player: IRankingData, index: number): void => {
+            fields.push({
+                name: `${index + 1}. ${player.nick}`,
+                value: `Level: ${player.level}, Frag${player.frags > 1 ? 's' : ''}: ${player.frags} :underworld:`,
+                inline: false,
+            });
         });
+
+        const embed = new MessageEmbed();
+        embed.setTitle('💪Ranking');
+        embed.setColor('#0099ff');
+        embed.setDescription('Top 10 players in the game');
+        embed.setFooter({
+            text: 'Made with ❤️ by UnderworldBOT',
+        });
+        embed.setTimestamp();
+        embed.setThumbnail('https://wydunderworld.com/static/components/Logo/Logo-wow-sitenav.596840db77b4d485a44d65e897e3de57.png');
+        embed.addFields(fields);
+        
+        channel.send({
+            embeds: [embed],
+        });
+
+        return;
     }
 }
