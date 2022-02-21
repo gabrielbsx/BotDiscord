@@ -12,7 +12,11 @@ export default class Ranking {
         this.client = client;
     }
 
-    public static async sendRanking(): Promise<void> {
+    public static async sendRanking(previousMessage: any | undefined = undefined): Promise<void> {
+        if (previousMessage) {
+            await previousMessage.delete();
+        }
+
         const channel: TextChannel | any = this.client.channels.cache.find((channel: AnyChannel): TextChannel | any => {
             if (!channel.isText())
                 return;
@@ -44,17 +48,22 @@ export default class Ranking {
         const embed = new MessageEmbed();
         embed.setTitle('💪Ranking');
         embed.setColor('#0099ff');
-        embed.setDescription('Top 10 players in the game');
+        embed.setDescription('Top 5 players in the game');
         embed.setFooter({
-            text: 'Made with ❤️ by UnderworldBOT',
+            text: 'Made with ❤️ by Underworld BOT',
         });
         embed.setTimestamp();
         embed.setThumbnail('https://wydunderworld.com/static/components/Logo/Logo-wow-sitenav.596840db77b4d485a44d65e897e3de57.png');
         embed.addFields(fields);
         
-        channel.send({
+        const meessage = await channel.send({
             embeds: [embed],
         });
+
+        //wait for 10 minutes
+        setTimeout(() => {
+            this.sendRanking(meessage);
+        }, 100);
 
         return;
     }
