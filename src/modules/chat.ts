@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { AnyChannel, Client, TextChannel } from 'discord.js';
+import socketio from 'socket.io-client';
 import Environment from '../core/environment';
 import { IChat } from './chat.dto';
 
@@ -26,6 +27,10 @@ export default class Chat {
         if (!channel)
             return;
 
-        //socketio
+        const socket = socketio(`${Environment.get('SOCKETIO')}`);
+
+        socket.on('messages', (data): void => {
+            console.log(data);
+        });
     }
 }
