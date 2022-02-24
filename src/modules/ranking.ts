@@ -64,7 +64,7 @@ export default class Ranking {
         });
 
         //wait for 10 minutes
-        setTimeout(() => {
+        setInterval(async () => {
             this.sendRanking(meessage);
         }, 1000 * 60 * 10);
 

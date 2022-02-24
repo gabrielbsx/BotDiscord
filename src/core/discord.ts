@@ -1,6 +1,7 @@
 import { Client, ClientOptions } from 'discord.js';
 import Environment from './environment';
 import Ranking from '../modules/ranking';
+import Chat from '../modules/chat';
 
 export default class Discord {
     private clientOptions: ClientOptions = {
@@ -17,6 +18,9 @@ export default class Discord {
 
             Ranking.setClient(this.client);
             Ranking.sendRanking();
+            
+            Chat.setClient(this.client);
+            Chat.sendChat();
         });
     }
 

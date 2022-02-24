@@ -1,8 +1,7 @@
-import axios from 'axios';
 import { AnyChannel, Client, TextChannel } from 'discord.js';
 import socketio from 'socket.io-client';
 import Environment from '../core/environment';
-import { IChat } from './chat.dto';
+import { IChatData } from './chat.dto';
 
 export default class Chat {
     private static client: Client;
@@ -18,7 +17,7 @@ export default class Chat {
 
             const textChannel = channel as TextChannel;
 
-            if (textChannel.name !== '💬chat-ingame')
+            if (textChannel.name !== '📄chat-ingame')
                 return;
 
             return textChannel;
@@ -29,8 +28,13 @@ export default class Chat {
 
         const socket = socketio(`${Environment.get('SOCKETIO')}`);
 
-        socket.on('messages', (data): void => {
-            console.log(data);
+        socket.on('messages', (data: IChatData[]): void => {
+            data.forEach((message: IChatData): void => {
+                if (message.message[0] !== '@')
+                    return;
+                //send message
+                channel.send(`${message.nick}: ${message.message}`);
+            });
         });
     }
 }
