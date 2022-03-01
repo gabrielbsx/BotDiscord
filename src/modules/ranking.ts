@@ -1,84 +1,101 @@
-import axios from 'axios';
-import { AnyChannel, Client, GuildEmoji, TextChannel } from 'discord.js';
-import Environment from '../core/environment';
-import { IRankingData, IRanking } from './ranking.dto';
-import gameconfig from '../config/game';
-import { MessageEmbed } from 'discord.js';
+import axios from "axios";
+import { AnyChannel, Client, GuildEmoji, TextChannel } from "discord.js";
+import Environment from "../core/environment";
+import { IRankingData, IRanking } from "./ranking.dto";
+import gameconfig from "../config/game";
+import { MessageEmbed } from "discord.js";
 
 export default class Ranking {
-    private static client: Client;
+  private static client: Client;
 
-    public static async setClient(client: Client): Promise<void> {
-        this.client = client;
+  public static async setClient(client: Client): Promise<void> {
+    this.client = client;
+  }
+
+  public static async sendRanking(
+    previousMessage: any | undefined = undefined
+  ): Promise<void> {
+    if (previousMessage) {
+      try {
+        await previousMessage.delete();
+      } catch (err) {
+        console.log(err);
+      }
     }
 
-    public static async sendRanking(previousMessage: any | undefined = undefined): Promise<void> {
-        if (previousMessage) {
-            try {
-                await previousMessage.delete();
-            } catch (err) {
-                console.log(err);
-            }
-        }
+    const channel: TextChannel | any = this.client.channels.cache.find(
+      (channel: AnyChannel): TextChannel | any => {
+        if (!channel.isText()) return;
 
-        const channel: TextChannel | any = this.client.channels.cache.find((channel: AnyChannel): TextChannel | any => {
-            if (!channel.isText())
-                return;
+        const textChannel = channel as TextChannel;
 
-            const textChannel = channel as TextChannel;
+        if (textChannel.name !== "💪ranking") return;
 
-            if (textChannel.name !== '💪ranking')
-                return;
+        return textChannel;
+      }
+    );
 
-            return textChannel;
-        });
+    if (!channel) return;
 
-        if (!channel)
-            return;
-
-        //delete all messages in the channel
+    //delete all messages in the channel
+    setInterval(async () => {
+      try {
         channel.messages.fetch().then((messages: any): void => {
-            messages.forEach((message: any): void => {
-                message.delete();
-            });
+          messages.forEach((message: any): void => {
+            console.log("deleting message", message.id);
+            message.delete();
+          });
         });
+      } catch (err) {
+        console.log(err);
+      }
+    }, 10);
 
-        const ranking = await axios.get<IRanking>(`${Environment.get('API')}/ranking`);
+    const ranking = await axios.get<IRanking>(
+      `${Environment.get("API")}/ranking`
+    );
 
-        const fields: Array<{ name: string, value: string, inline: boolean }> = [];
+    const fields: Array<{ name: string; value: string; inline: boolean }> = [];
 
-        ranking.data.data.forEach((player: IRankingData, index: number): void => {
-            const _class = gameconfig.get('class')!.get(player.class);
-            const _evolution = gameconfig.get('evolution')!.get(player.evolution);
-            const _kingdom = gameconfig.get('kingdom')!.get(player.kingdom);
+    ranking.data.data.forEach((player: IRankingData, index: number): void => {
+      const _class = gameconfig.get("class")!.get(player.class);
+      const _evolution = gameconfig.get("evolution")!.get(player.evolution);
+      const _kingdom = gameconfig.get("kingdom")!.get(player.kingdom);
 
-            fields.push({
-                name: `${index + 1}. ${_kingdom}${_class}[${_evolution}] ${player.nick}`,
-                value: `Level: ${player.level + 1}, Frag${player.frags > 1 ? 's' : ''}: ${player.frags}`,
-                inline: false,
-            });
-        });
+      fields.push({
+        name: `${index + 1}. ${_kingdom}${_class}[${_evolution}] ${
+          player.nick
+        }`,
+        value: `Level: ${player.level + 1}, Frag${
+          player.frags > 1 ? "s" : ""
+        }: ${player.frags}`,
+        inline: false,
+      });
+    });
+    return;
 
-        const embed = new MessageEmbed();
-        embed.setTitle('💪Ranking');
-        embed.setColor('#0099ff');
-        embed.setDescription('Top 5 players in the game');
-        embed.setFooter({
-            text: 'Made with ❤️ by Underworld BOT',
-        });
-        embed.setTimestamp();
-        embed.setThumbnail('https://wydunderworld.com/static/components/Logo/Logo-wow-sitenav.596840db77b4d485a44d65e897e3de57.png');
-        embed.addFields(fields);
+    const embed = new MessageEmbed();
+    embed.setTitle("💪Ranking");
+    embed.setColor("#0099ff");
+    embed.setDescription("Top 5 players in the game");
+    embed.setFooter({
+      text: "Made with ❤️ by Underworld BOT",
+    });
+    embed.setTimestamp();
+    embed.setThumbnail(
+      "https://wydunderworld.com/static/components/Logo/Logo-wow-sitenav.596840db77b4d485a44d65e897e3de57.png"
+    );
+    embed.addFields(fields);
 
-        const meessage = await channel.send({
-            embeds: [embed],
-        });
+    const meessage = await channel.send({
+      embeds: [embed],
+    });
 
-        //wait for 10 minutes
-        setInterval(async () => {
-            this.sendRanking(meessage);
-        }, 1000 * 60 * 10);
+    //wait for 10 minutes
+    setInterval(async () => {
+      this.sendRanking(meessage);
+    }, 1000 * 60 * 10);
 
-        return;
-    }
+    return;
+  }
 }
