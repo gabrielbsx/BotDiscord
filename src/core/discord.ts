@@ -46,33 +46,51 @@ export default class Discord {
                             if (response.data) {
                                 var replyMessage = '';
                                 for (const item of response.data) {
-                                    replyMessage += `Mob: ${item.mobname} - Map: ${item.map} - ${item.item.itemname.replace(/_/g, ' ')}\n`;
+                                    replyMessage += `\`Mob: ${item.mobname}\` - \`Map: ${item.map}\` - \`${item.item.itemname.replace(/_/g, ' ')}\`\n`;
                                     if (replyMessage.length > 1800) {
                                         //await message.reply(replyMessage);
-                                        await message.author.send(replyMessage);
+                                        try {
+                                            await message.author.send(replyMessage);
+                                        } catch (error) {
+                                            console.log(error);
+                                        }
                                         replyMessage = '';
                                     }
                                 }
-                                if (replyMessage.length > 0)
+                                if (replyMessage.length > 0) {
                                     //await message.reply(replyMessage);
-                                    await message.author.send(replyMessage);
+                                    try {
+                                        await message.author.send(replyMessage);
+                                    } catch (error) {
+                                        console.log(error);
+                                    }
+                                }
                             }
                             break;
                         case 'mob':
-                            var response = await axios.get<any>(`${Environment.get('API')}/droplistbymob/${message.content.split(' ')[2]}`);
+                            var response = await axios.get<any>(`${Environment.get('API')}/droplistbymobname/${message.content.split(' ')[2]}`);
                             if (response.data) {
                                 var replyMessage = '';
                                 for (const item of response.data) {
-                                    replyMessage += `Mob: ${item.mobname} - Map: ${item.map} - ${item.item.itemname.replace(/_/g, ' ')}\n`;
+                                    replyMessage += `\`Mob: ${item.mobname}\` - \`Map: ${item.map}\` - \`${item.item.itemname.replace(/_/g, ' ')}\`\n`;
                                     if (replyMessage.length > 1800) {
                                         //await message.reply(replyMessage);
-                                        await message.author.send(replyMessage);
+                                        try {
+                                            await message.author.send(replyMessage);
+                                        } catch (error) {
+                                            console.log(error);
+                                        }
                                         replyMessage = '';
                                     }
                                 }
-                                if (replyMessage.length > 0)
+                                if (replyMessage.length > 0) {
                                     //await message.reply(replyMessage);
-                                    await message.author.send(replyMessage);
+                                    try {
+                                        await message.author.send(replyMessage);
+                                    } catch (error) {
+                                        console.log(error);
+                                    }
+                                }
                             }
                             break;
                         case 'map':
@@ -80,16 +98,25 @@ export default class Discord {
                             if (response.data) {
                                 var replyMessage = '';
                                 for (const item of response.data) {
-                                    replyMessage += `Mob: ${item.mobname} - Map: ${item.map} - ${item.item.itemname.replace(/_/g, ' ')}\n`;
+                                    replyMessage += `\`Mob: ${item.mobname}\` - \`Map: ${item.map}\` - \`${item.item.itemname.replace(/_/g, ' ')}\`\n`;
                                     if (replyMessage.length > 1800) {
                                         //await message.reply(replyMessage);
-                                        await message.author.send(replyMessage);
+                                        try {
+                                            await message.author.send(replyMessage);
+                                        } catch (error) {
+                                            console.log(error);
+                                        }
                                         replyMessage = '';
                                     }
                                 }
-                                if (replyMessage.length > 0)
+                                if (replyMessage.length > 0) {
                                     //await message.reply(replyMessage);
-                                    await message.author.send(replyMessage);
+                                    try {
+                                        await message.author.send(replyMessage);
+                                    } catch (error) {
+                                        console.log(error);
+                                    }
+                                }
                             }
                             break;
                     }
