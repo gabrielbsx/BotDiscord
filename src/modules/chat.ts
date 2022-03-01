@@ -1,7 +1,7 @@
-import { AnyChannel, Client, TextChannel } from "discord.js";
-import socketio from "socket.io-client";
-import Environment from "../core/environment";
-import { IChatData } from "./chat.dto";
+import { AnyChannel, Client, TextChannel } from 'discord.js';
+import socketio from 'socket.io-client';
+import Environment from '../core/environment';
+import { IChatData } from './chat.dto';
 
 export default class Chat {
   private static client: Client;
@@ -17,7 +17,7 @@ export default class Chat {
 
         const textChannel = channel as TextChannel;
 
-        if (textChannel.name !== "📄chat-ingame") return;
+        if (textChannel.name !== '📄chat-ingame') return;
 
         return textChannel;
       }
@@ -32,16 +32,20 @@ export default class Chat {
       });
     });*/
 
-    const socket = socketio(`${Environment.get("SOCKETIO")}`);
+    const socket = socketio(`${Environment.get('SOCKETIO')}`);
 
-    socket.on("botmessages", (data: IChatData): void => {
+    socket.on('botmessages', (data: IChatData): void => {
       if (data) {
         if (data.message && data.nick) {
-          if (data!.message[0] === "@") {
-            channel.send(`[${data.nick}]> ${data.message.replace("@", "")}`);
+          if (data!.message[0] === '@') {
+            if (data!.message[1] === '@') {
+              channel.send(`\`\`\`diff\n-[${data.nick}]> ${data.message.replace('@', '').replace('@', '')}\n\`\`\``);
+            } else {
+              channel.send(`\`\`\`md\n#[${data.nick}]> ${data.message.replace('@', '')}\n\`\`\``);
+            }
           }
         }
-        socket.emit("botmessages", { id: data.id });
+        socket.emit('botmessages', { id: data.id });
       } else {
         socket.emit(`botmessages`, { id: 1 });
       }
