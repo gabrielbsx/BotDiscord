@@ -35,6 +35,9 @@ export default class Discord {
                     if (!channel)
                         return;
 
+                    if (message.channel.id !== channel.id)
+                        return;
+
                     const command = message.content.split(' ')[1];
 
                     switch(command) {
@@ -43,7 +46,7 @@ export default class Discord {
                             if (response.data) {
                                 var replyMessage = '';
                                 for (const item of response.data) {
-                                    replyMessage += `Mob: ${item.mobname} - Map: ${item.map} - ${item.item.itemname.replace(/_/g, ' ')}%\n`;
+                                    replyMessage += `Mob: ${item.mobname} - Map: ${item.map} - ${item.item.itemname.replace(/_/g, ' ')}\n`;
                                     if (replyMessage.length > 1800) {
                                         await message.reply(replyMessage);
                                         replyMessage = '';
@@ -54,11 +57,31 @@ export default class Discord {
                             break;
                         case 'mob':
                             var response = await axios.get<any>(`${Environment.get('API')}/droplistbymob/${message.content.split(' ')[2]}`);
-                            console.log(response.data);
+                            if (response.data) {
+                                var replyMessage = '';
+                                for (const item of response.data) {
+                                    replyMessage += `Mob: ${item.mobname} - Map: ${item.map} - ${item.item.itemname.replace(/_/g, ' ')}\n`;
+                                    if (replyMessage.length > 1800) {
+                                        await message.reply(replyMessage);
+                                        replyMessage = '';
+                                    }
+                                }
+                                await message.reply(replyMessage);
+                            }
                             break;
                         case 'map':
                             var response = await axios.get<any>(`${Environment.get('API')}/droplistbymap/${message.content.split(' ')[2]}`);
-                            console.log(response.data);
+                            if (response.data) {
+                                var replyMessage = '';
+                                for (const item of response.data) {
+                                    replyMessage += `Mob: ${item.mobname} - Map: ${item.map} - ${item.item.itemname.replace(/_/g, ' ')}\n`;
+                                    if (replyMessage.length > 1800) {
+                                        await message.reply(replyMessage);
+                                        replyMessage = '';
+                                    }
+                                }
+                                await message.reply(replyMessage);
+                            }
                             break;
                     }
                 }
