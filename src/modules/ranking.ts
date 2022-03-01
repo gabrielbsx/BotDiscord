@@ -36,6 +36,13 @@ export default class Ranking {
         if (!channel)
             return;
 
+        //delete all messages in the channel
+        channel.messages.fetch().then((messages: any): void => {
+            messages.forEach((message: any): void => {
+                message.delete();
+            });
+        });
+
         const ranking = await axios.get<IRanking>(`${Environment.get('API')}/ranking`);
 
         const fields: Array<{ name: string, value: string, inline: boolean }> = [];
