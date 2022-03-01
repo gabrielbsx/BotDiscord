@@ -31,7 +31,7 @@ export default class Discord {
             this.client.on('message', async (message) => {
                 if (message.content.includes('!droplist')) {
                     const channel = this.client.channels.cache.find((channel: any) => channel.name === '🔎droplist');
-
+                    
                     if (!channel)
                         return;
 
@@ -48,11 +48,14 @@ export default class Discord {
                                 for (const item of response.data) {
                                     replyMessage += `Mob: ${item.mobname} - Map: ${item.map} - ${item.item.itemname.replace(/_/g, ' ')}\n`;
                                     if (replyMessage.length > 1800) {
-                                        await message.reply(replyMessage);
+                                        //await message.reply(replyMessage);
+                                        await message.author.send(replyMessage);
                                         replyMessage = '';
                                     }
                                 }
-                                await message.reply(replyMessage);
+                                if (replyMessage.length > 0)
+                                    //await message.reply(replyMessage);
+                                    await message.author.send(replyMessage);
                             }
                             break;
                         case 'mob':
@@ -62,11 +65,14 @@ export default class Discord {
                                 for (const item of response.data) {
                                     replyMessage += `Mob: ${item.mobname} - Map: ${item.map} - ${item.item.itemname.replace(/_/g, ' ')}\n`;
                                     if (replyMessage.length > 1800) {
-                                        await message.reply(replyMessage);
+                                        //await message.reply(replyMessage);
+                                        await message.author.send(replyMessage);
                                         replyMessage = '';
                                     }
                                 }
-                                await message.reply(replyMessage);
+                                if (replyMessage.length > 0)
+                                    //await message.reply(replyMessage);
+                                    await message.author.send(replyMessage);
                             }
                             break;
                         case 'map':
@@ -76,11 +82,14 @@ export default class Discord {
                                 for (const item of response.data) {
                                     replyMessage += `Mob: ${item.mobname} - Map: ${item.map} - ${item.item.itemname.replace(/_/g, ' ')}\n`;
                                     if (replyMessage.length > 1800) {
-                                        await message.reply(replyMessage);
+                                        //await message.reply(replyMessage);
+                                        await message.author.send(replyMessage);
                                         replyMessage = '';
                                     }
                                 }
-                                await message.reply(replyMessage);
+                                if (replyMessage.length > 0)
+                                    //await message.reply(replyMessage);
+                                    await message.author.send(replyMessage);
                             }
                             break;
                     }
