@@ -14,7 +14,11 @@ export default class Ranking {
 
     public static async sendRanking(previousMessage: any | undefined = undefined): Promise<void> {
         if (previousMessage) {
-            await previousMessage.delete();
+            try {
+                await previousMessage.delete();
+            } catch (err) {
+                console.log(err);
+            }
         }
 
         const channel: TextChannel | any = this.client.channels.cache.find((channel: AnyChannel): TextChannel | any => {

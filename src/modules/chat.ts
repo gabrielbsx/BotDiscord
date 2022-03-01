@@ -38,10 +38,12 @@ export default class Chat {
       if (data) {
         if (data.message && data.nick) {
           if (data!.message[0] === "@") {
-            channel.send(`${data!.nick}: ${data!.message}`);
+            channel.send(`[${data.nick}]> ${data.message.replace("@", "")}`);
           }
         }
         socket.emit("botmessages", { id: data.id });
+      } else {
+        socket.emit(`botmessages`, { id: 1 });
       }
     });
   }
