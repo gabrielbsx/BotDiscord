@@ -37,19 +37,16 @@ export default class Ranking {
 
     if (!channel) return;
 
-    try {
-      channel.messages.fetch().then((messages: any): void => {
-        messages.forEach((message: any): void => {
-          console.log('deleting message', message.id);
-          try {
-            message.delete();
-          } catch (err) {
-            console.log(err);
-          }
-        });
-      });
-    } catch (err) {
-      console.log(err);
+    const messages = await channel.messages.fetch();
+
+    if (messages.length > 0) {
+      for (const message of messages) {
+        try {
+          await message.delete();
+        } catch (err) {
+          console.log(err);
+        }
+      }
     }
 
     const ranking = await axios.get<IRanking>(
@@ -64,12 +61,10 @@ export default class Ranking {
       const _kingdom = gameconfig.get('kingdom')!.get(player.kingdom);
 
       fields.push({
-        name: `${index + 1}. ${_kingdom}${_class}[${_evolution}] ${
-          player.nick
-        }`,
-        value: `Level: ${player.level + 1}, Frag${
-          player.frags > 1 ? 's' : ''
-        }: ${player.frags}`,
+        name: `${index + 1}. ${_kingdom}${_class}[${_evolution}] ${player.nick
+          }`,
+        value: `Level: ${player.level + 1}, Frag${player.frags > 1 ? 's' : ''
+          }: ${player.frags}`,
         inline: false,
       });
     });
