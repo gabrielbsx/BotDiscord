@@ -30,7 +30,14 @@ export default class Ranking {
     //reset messages in channel
     channel.messages.fetch({ limit: 100 }).then((messages: any) => {
       messages.forEach((message: any) => {
-        message.delete();
+        //if message httpStatus 404
+        if (message.id) {
+          try {
+            message.delete();
+          } catch (err) {
+            console.log('log');
+          }
+        }
       });
     });
 

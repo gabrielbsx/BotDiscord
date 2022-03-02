@@ -23,83 +23,91 @@ export class Droplist {
 
             switch (command) {
                 case 'item':
-                    var response = await axios.get<any>(`${Environment.get('API')}/droplistbyitemname/${message.content.replace('!droplist item ', '')}`);
-                    if (response.data) {
-                        var replyMessage = '';
-                        for (const item of response.data) {
-                            replyMessage += `\`Mob: ${item.mobname}\` - \`Map: ${item.map}\` - \`${item.item.itemname.replace(/_/g, ' ')}\`\n`;
-                            if (replyMessage.length > 1800) {
-                                //await message.reply(replyMessage);
-                                try {
-                                    await message.author.send(replyMessage);
-                                } catch (error) {
-                                    console.log(error);
-                                }
-                                replyMessage = '';
-                            }
-                        }
-                        if (replyMessage.length > 0) {
-                            //await message.reply(replyMessage);
-                            try {
-                                await message.author.send(replyMessage);
-                            } catch (error) {
-                                console.log(error);
-                            }
-                        }
-                    }
+                    await this.sendDroplistByItem(message);
                     break;
                 case 'mob':
-                    var response = await axios.get<any>(`${Environment.get('API')}/droplistbymobname/${message.content.replace('!droplist mob ', '')}`);
-                    if (response.data) {
-                        var replyMessage = '';
-                        for (const item of response.data) {
-                            replyMessage += `\`Mob: ${item.mobname}\` - \`Map: ${item.map}\` - \`${item.item.itemname.replace(/_/g, ' ')}\`\n`;
-                            if (replyMessage.length > 1800) {
-                                //await message.reply(replyMessage);
-                                try {
-                                    await message.author.send(replyMessage);
-                                } catch (error) {
-                                    console.log(error);
-                                }
-                                replyMessage = '';
-                            }
-                        }
-                        if (replyMessage.length > 0) {
-                            //await message.reply(replyMessage);
-                            try {
-                                await message.author.send(replyMessage);
-                            } catch (error) {
-                                console.log(error);
-                            }
-                        }
-                    }
+                    await this.sendDroplistByMob(message);
                     break;
                 case 'map':
-                    var response = await axios.get<any>(`${Environment.get('API')}/droplistbymap/${message.content.replace('!droplist map ', '')}`);
-                    if (response.data) {
-                        var replyMessage = '';
-                        for (const item of response.data) {
-                            replyMessage += `\`Mob: ${item.mobname}\` - \`Map: ${item.map}\` - \`${item.item.itemname.replace(/_/g, ' ')}\`\n`;
-                            if (replyMessage.length > 1800) {
-                                //await message.reply(replyMessage);
-                                try {
-                                    await message.author.send(replyMessage);
-                                } catch (error) {
-                                    console.log(error);
-                                }
-                                replyMessage = '';
-                            }
-                        }
-                        if (replyMessage.length > 0) {
-                            //await message.reply(replyMessage);
-                            try {
-                                await message.author.send(replyMessage);
-                            } catch (error) {
-                                console.log(error);
-                            }
-                        }
-                    }
+                    await this.sendDroplistByMap(message);
                     break;
+                case 'help':
+                    await this.sendHelp(message);
+                    break;
+            }
+        }
+        return;
+    }
+
+    public static async sendHelp(message: any): Promise<void> {
+        await message.reply('```!droplist item <item name>\n!droplist mob <mob name>\n!droplist map <map name>\n!droplist help```');
+        return;
+    }
+
+    public static async getByItemName(itemName: string): Promise<any> {
+        var response = await axios.get<any>(`${Environment.get('API')}/droplistbyitemname/${itemName}`);
+        return response.data;
+    }
+
+    public static async getByMobName(mobName: string): Promise<any> {
+        var response = await axios.get<any>(`${Environment.get('API')}/droplistbymobname/${mobName}`);
+        return response.data;
+    }
+
+    public static async getByMap(map: string): Promise<any> {
+        var response = await axios.get<any>(`${Environment.get('API')}/droplistbymap/${map}`);
+        return response.data;
+    }
+
+    public static async sendDroplistByItem(message: any): Promise<void> {
+        var response = await this.getByItemName(message.content.replace('!droplist item ', '').replace(/\s/g, '_'));
+        if (response.data) {
+            var replyMessage = '';
+            for (const item of response.data) {
+                replyMessage += `\`Mob: ${item.mobname}\` - \`Map: ${item.map}\` - \`${item.item.itemname.replace(/_/g, ' ')}\`\n`;
+                if (replyMessage.length > 1800) {
+                    await message.reply(replyMessage);
+                    replyMessage = '';
+                }
+            }
+            if (replyMessage.length > 0) {
+                await message.reply(replyMessage);
+            }
+        }
+        return;
+    }
+
+    public static async sendDroplistByMob(message: any): Promise<void> {
+        var response = await this.getByMobName(message.content.replace('!droplist mob ', '').replace(/\s/g, '_'));
+        if (response.data) {
+            var replyMessage = '';
+            for (const item of response.data) {
+                replyMessage += `\`Mob: ${item.mobname}\` - \`Map: ${item.map}\` - \`${item.item.itemname.replace(/_/g, ' ')}\`\n`;
+                if (replyMessage.length > 1800) {
+                    await message.reply(replyMessage);
+                    replyMessage = '';
+                }
+            }
+            if (replyMessage.length > 0) {
+                await message.reply(replyMessage);
+            }
+        }
+        return;
+    }
+
+    public static async sendDroplistByMap(message: any): Promise<void> {
+        var response = await this.getByMap(message.content.replace('!droplist map ', '').replace(/\s/g, '_'));
+        if (response.data) {
+            var replyMessage = '';
+            for (const item of response.data) {
+                replyMessage += `\`Mob: ${item.mobname}\` - \`Map: ${item.map}\` - \`${item.item.itemname.replace(/_/g, ' ')}\`\n`;
+                if (replyMessage.length > 1800) {
+                    await message.reply(replyMessage);
+                    replyMessage = '';
+                }
+            }
+            if (replyMessage.length > 0) {
+                await message.reply(replyMessage);
             }
         }
         return;
