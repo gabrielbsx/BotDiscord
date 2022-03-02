@@ -12,17 +12,7 @@ export default class Ranking {
     this.client = client;
   }
 
-  public static async sendRanking(
-    previousMessage: any | undefined = undefined
-  ): Promise<void> {
-    if (previousMessage) {
-      try {
-        await previousMessage.delete();
-      } catch (err) {
-        console.log(err);
-      }
-    }
-
+  public static async sendRanking(): Promise<void> {
     const channel: TextChannel | any = this.client.channels.cache.find(
       (channel: AnyChannel): TextChannel | any => {
         if (!channel.isText()) return;
@@ -37,17 +27,12 @@ export default class Ranking {
 
     if (!channel) return;
 
-    const messages = await channel.messages.fetch();
-
-    if (messages.length > 0) {
-      for (const message of messages) {
-        try {
-          await message.delete();
-        } catch (err) {
-          console.log(err);
-        }
-      }
-    }
+    //reset messages in channel
+    channel.messages.fetch({ limit: 100 }).then((messages: any) => {
+      messages.forEach((message: any) => {
+        message.delete();
+      });
+    });
 
     const ranking = await axios.get<IRanking>(
       `${Environment.get('API')}/ranking`
@@ -88,7 +73,7 @@ export default class Ranking {
 
     //wait for 10 minutes
     setInterval(async () => {
-      this.sendRanking(meessage);
+      this.sendRanking();
     }, 1000 * 60 * 10);
 
     return;

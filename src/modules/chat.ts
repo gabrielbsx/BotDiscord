@@ -25,13 +25,6 @@ export default class Chat {
 
     if (!channel) return;
 
-    //delete all messages in channel
-    /*channel.messages.fetch({ limit: 100 }).then((messages: any): void => {
-      messages.forEach((message: any): void => {
-        message.delete();
-      });
-    });*/
-
     const socket = socketio(`${Environment.get('SOCKETIO')}`);
 
     socket.on('botmessages', (data: IChatData): void => {
