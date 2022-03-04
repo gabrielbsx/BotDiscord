@@ -46,17 +46,17 @@ export class Droplist {
 
     public static async getByItemName(itemName: string): Promise<any> {
         var response = await axios.get<any>(`${Environment.get('API')}/droplistbyitemname/${itemName}`);
-        return response.data;
+        return response;
     }
 
     public static async getByMobName(mobName: string): Promise<any> {
         var response = await axios.get<any>(`${Environment.get('API')}/droplistbymobname/${mobName}`);
-        return response.data;
+        return response;
     }
 
     public static async getByMap(map: string): Promise<any> {
         var response = await axios.get<any>(`${Environment.get('API')}/droplistbymap/${map}`);
-        return response.data;
+        return response;
     }
 
     public static async sendDroplistByItem(message: any): Promise<void> {

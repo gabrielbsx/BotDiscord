@@ -27,20 +27,6 @@ export default class Ranking {
 
     if (!channel) return;
 
-    //reset messages in channel
-    channel.messages.fetch({ limit: 100 }).then((messages: any) => {
-      messages.forEach((message: any) => {
-        //if message httpStatus 404
-        if (message.id) {
-          try {
-            message.delete();
-          } catch (err) {
-            console.log('log');
-          }
-        }
-      });
-    });
-
     const ranking = await axios.get<IRanking>(
       `${Environment.get('API')}/ranking`
     );
@@ -74,13 +60,14 @@ export default class Ranking {
     );
     embed.addFields(fields);
 
-    const meessage = await channel.send({
+    const message = await channel.send({
       embeds: [embed],
     });
 
-    //wait for 10 minutes
-    setInterval(async () => {
-      this.sendRanking();
+    //waiting for 10 minutes to delete the message and call sendranking
+    setTimeout(async (): Promise<void> => {
+      await message.delete();
+      await Ranking.sendRanking();
     }, 1000 * 60 * 10);
 
     return;
