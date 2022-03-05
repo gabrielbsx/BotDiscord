@@ -34,13 +34,22 @@ export class Droplist {
                 case 'help':
                     await this.sendHelp(message);
                     break;
+                case 'items':
+                    await this.sendDroplistAllItemnames(message);
+                    break;
+                case 'mobs':
+                    await this.sendDroplistAllMobnames(message);
+                    break;
+                case 'maps':
+                    await this.sendDroplistAllMaps(message);
+                    break;
             }
         }
         return;
     }
 
     public static async sendHelp(message: any): Promise<void> {
-        await message.reply('```!droplist item <item name>\n!droplist mob <mob name>\n!droplist map <map name>\n!droplist help```');
+        await message.reply('```!droplist item <itemname>\n!droplist mob <mobname>\n!droplist map <mapname>\n!droplist items\n!droplist mobs\n!droplist maps```');
         return;
     }
 
@@ -101,6 +110,60 @@ export class Droplist {
             var replyMessage = '';
             for (const item of response.data) {
                 replyMessage += `\`Mob: ${item.mobname}\` - \`Map: ${item.map}\` - \`${item.item.itemname.replace(/_/g, ' ')}\`\n`;
+                if (replyMessage.length > 1800) {
+                    await message.reply(replyMessage);
+                    replyMessage = '';
+                }
+            }
+            if (replyMessage.length > 0) {
+                await message.reply(replyMessage);
+            }
+        }
+        return;
+    }
+
+    public static async sendDroplistAllItemnames(message: any): Promise<void> {
+        var response = await axios.get<any>(`${Environment.get('API')}/droplistallitemname`);
+        if (response.data) {
+            var replyMessage = '';
+            for (const item of response.data) {
+                replyMessage += `\`${item.itemname.replace(/_/g, ' ')}\`\n`;
+                if (replyMessage.length > 1800) {
+                    await message.reply(replyMessage);
+                    replyMessage = '';
+                }
+            }
+            if (replyMessage.length > 0) {
+                await message.reply(replyMessage);
+            }
+        }
+        return;
+    }
+
+    public static async sendDroplistAllMobnames(message: any): Promise<void> {
+        var response = await axios.get<any>(`${Environment.get('API')}/droplistallmobname`);
+        if (response.data) {
+            var replyMessage = '';
+            for (const item of response.data) {
+                replyMessage += `\`${item.mobname}\`\n`;
+                if (replyMessage.length > 1800) {
+                    await message.reply(replyMessage);
+                    replyMessage = '';
+                }
+            }
+            if (replyMessage.length > 0) {
+                await message.reply(replyMessage);
+            }
+        }
+        return;
+    }
+
+    public static async sendDroplistAllMaps(message: any): Promise<void> {
+        var response = await axios.get<any>(`${Environment.get('API')}/droplistallmap`);
+        if (response.data) {
+            var replyMessage = '';
+            for (const item of response.data) {
+                replyMessage += `\`${item.map}\`\n`;
                 if (replyMessage.length > 1800) {
                     await message.reply(replyMessage);
                     replyMessage = '';
