@@ -35,7 +35,7 @@ export class Droplist {
                     await this.sendHelp(message);
                     break;
                 case 'items':
-                    await this.sendDroplistAllItemnames(message);
+                    //await this.sendDroplistAllItemnames(message);
                     break;
                 case 'mobs':
                     await this.sendDroplistAllMobnames(message);
@@ -49,21 +49,25 @@ export class Droplist {
     }
 
     public static async sendHelp(message: any): Promise<void> {
-        await message.reply('```!droplist item <itemname>\n!droplist mob <mobname>\n!droplist map <mapname>\n!droplist items\n!droplist mobs\n!droplist maps```');
+        await message.reply('```!droplist item <itemname>\n!droplist mob <mobname>\n!droplist map <mapname>\n!droplist mobs\n!droplist maps```');
         return;
     }
 
     public static async getByItemName(itemName: string): Promise<any> {
+        //replace all accented characters in one line
+        itemName = itemName.replace(/[ÀÁÂÃÄÅ]/g, "A").replace(/[àáâãäå]/g, "a").replace(/[ÈÉÊË]/g, "E").replace(/[èéêë]/g, "e").replace(/[ÌÍÎÏ]/g, "I").replace(/[ìíîï]/g, "i").replace(/[ÒÓÔÕÖ]/g, "O").replace(/[òóôõö]/g, "o").replace(/[ÙÚÛÜ]/g, "U").replace(/[ùúûü]/g, "u").replace(/[Ç]/g, "C").replace(/[ç]/g, "c");
         var response = await axios.get<any>(`${Environment.get('API')}/droplistbyitemname/${itemName}`);
         return response;
     }
 
     public static async getByMobName(mobName: string): Promise<any> {
+        mobName = mobName.replace(/[ÀÁÂÃÄÅ]/g, "A").replace(/[àáâãäå]/g, "a").replace(/[ÈÉÊË]/g, "E").replace(/[èéêë]/g, "e").replace(/[ÌÍÎÏ]/g, "I").replace(/[ìíîï]/g, "i").replace(/[ÒÓÔÕÖ]/g, "O").replace(/[òóôõö]/g, "o").replace(/[ÙÚÛÜ]/g, "U").replace(/[ùúûü]/g, "u").replace(/[Ç]/g, "C").replace(/[ç]/g, "c");
         var response = await axios.get<any>(`${Environment.get('API')}/droplistbymobname/${mobName}`);
         return response;
     }
 
     public static async getByMap(map: string): Promise<any> {
+        map = map.replace(/[ÀÁÂÃÄÅ]/g, "A").replace(/[àáâãäå]/g, "a").replace(/[ÈÉÊË]/g, "E").replace(/[èéêë]/g, "e").replace(/[ÌÍÎÏ]/g, "I").replace(/[ìíîï]/g, "i").replace(/[ÒÓÔÕÖ]/g, "O").replace(/[òóôõö]/g, "o").replace(/[ÙÚÛÜ]/g, "U").replace(/[ùúûü]/g, "u").replace(/[Ç]/g, "C").replace(/[ç]/g, "c");
         var response = await axios.get<any>(`${Environment.get('API')}/droplistbymap/${map}`);
         return response;
     }
