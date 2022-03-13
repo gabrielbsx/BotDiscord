@@ -1,9 +1,9 @@
-import axios from 'axios';
-import { AnyChannel, Client, GuildEmoji, TextChannel } from 'discord.js';
-import Environment from '../core/environment';
+import { AnyChannel, Client, TextChannel } from 'discord.js';
 import { IRankingData, IRanking } from './ranking.dto';
-import gameconfig from '../config/game';
+import gameconfig from '../../config/game';
 import { MessageEmbed } from 'discord.js';
+import http from '../../core/http/http';
+import { IFields } from './ranking.interface';
 
 export default class Ranking {
   private static client: Client;
@@ -27,11 +27,11 @@ export default class Ranking {
 
     if (!channel) return;
 
-    const ranking = await axios.get<IRanking>(
-      `${Environment.get('API')}/ranking`
+    const ranking = await http.get<IRanking>(
+      `/ranking`
     );
 
-    const fields: Array<{ name: string; value: string; inline: boolean }> = [];
+    const fields: Array<IFields> = [];
 
     ranking.data.data.forEach((player: IRankingData, index: number): void => {
       const _class = gameconfig.get('class')!.get(player.class);

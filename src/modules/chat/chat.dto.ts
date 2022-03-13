@@ -1,4 +1,4 @@
-import { IMeta } from './meta.dto';
+import { IMeta } from '../meta/meta.dto';
 
 export interface IChatData {
     id: number,

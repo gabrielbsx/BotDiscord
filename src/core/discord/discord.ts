@@ -1,9 +1,10 @@
 import { Client, ClientOptions } from 'discord.js';
-import Environment from './environment';
-import Ranking from '../modules/ranking';
-import Chat from '../modules/chat';
-import Death from '../modules/death';
-import { Droplist } from '../modules/droplist';
+import Environment from './../environment/environment';
+import Ranking from '../../modules/ranking/ranking';
+import Chat from '../../modules/chat/chat';
+import Death from '../../modules/death/death';
+import { Droplist } from '../../modules/droplist/droplist';
+import { News } from '../../modules/news/news';
 
 export default class Discord {
     private clientOptions: ClientOptions = {
@@ -31,6 +32,9 @@ export default class Discord {
                 Droplist.setClient(this.client);
                 Droplist.start(message);
             });
+
+            News.setClient(this.client);
+            News.start();
         });
     }
 

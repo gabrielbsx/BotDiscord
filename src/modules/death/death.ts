@@ -1,6 +1,6 @@
 import { AnyChannel, Client, TextChannel } from 'discord.js';
 import socketio from 'socket.io-client';
-import Environment from '../core/environment';
+import Environment from '../../core/environment/environment';
 import { IDeathData } from './death.dto';
 
 export default class Death {

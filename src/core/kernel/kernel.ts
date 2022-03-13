@@ -1,5 +1,5 @@
-import Discord from './discord';
-import Environment from './environment';
+import Discord from '../discord/discord';
+import Environment from '../environment/environment';
 
 export default class Kernel {
     private discord: Discord;

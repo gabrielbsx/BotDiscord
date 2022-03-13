@@ -1,4 +1,4 @@
-import Kernel from './core/kernel';
+import Kernel from './core/kernel/kernel';
 
 class Application extends Kernel {
     public constructor() {
